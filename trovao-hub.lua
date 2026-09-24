@@ -1,5 +1,5 @@
 --══════════════════════════════════════════
---⚡ TROVÃO HUB V1 — IGUAL A FOTO
+--⚡ TROVÃO HUB V1 • GL
 --Equipe Trovão • GL
 --══════════════════════════════════════════
 
@@ -13,7 +13,7 @@ local PlayerGui = player:WaitForChild("PlayerGui")
 local GRAV_PADRAO = 196
 local FOV_PADRAO = Workspace.CurrentCamera.FieldOfView
 local alvoGrav = GRAV_PADRAO
-local aberto = true
+local janelaAberta = true
 
 local estado = {
     grav50=false, grav70=false, grav80=false,
@@ -22,7 +22,14 @@ local estado = {
     controle=false
 }
 
--- Trava gravidade + FOV + velocímetro
+-- Carregamento
+pcall(function() StarterGui:SetCore("Notification", {
+    Title = "⚡ TROVÃO HUB V1 • GL",
+    Text = "Carregando...\nEquipe Trovão • GL",
+    Duration = 2
+}) end)
+
+-- Atualizações
 RunService.Heartbeat:Connect(function()
     if Workspace.Gravity ~= alvoGrav then
         Workspace.Gravity = alvoGrav
@@ -45,15 +52,14 @@ RunService.Heartbeat:Connect(function()
     end
 end)
 
--- Criar tela toda
+-- Tela PRINCIPAL
 local Tela = Instance.new("ScreenGui")
 Tela.Name = "TrovaoHubV1"
 Tela.Parent = PlayerGui
 Tela.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
--- Fundo preto
+-- Janela
 local Janela = Instance.new("Frame")
-Janela.Name = "Janela"
 Janela.Size = UDim2.new(0,420,0,580)
 Janela.Position = UDim2.new(0.5,-210,0.5,-290)
 Janela.BackgroundColor3 = Color3.fromRGB(20,20,20)
@@ -63,7 +69,6 @@ Janela.Parent = Tela
 
 -- Cabeçalho
 local Cab = Instance.new("Frame")
-Cab.Name = "Cabecalho"
 Cab.Size = UDim2.new(1,0,0,60)
 Cab.BackgroundColor3 = Color3.fromRGB(30,10,10)
 Cab.BorderColor3 = Color3.fromRGB(220,40,40)
@@ -71,33 +76,17 @@ Cab.BorderSizePixel = 2
 Cab.Parent = Janela
 
 local Titulo = Instance.new("TextLabel")
-Titulo.Name = "Titulo"
 Titulo.Size = UDim2.new(1,-120,1,0)
-Titulo.Position = UDim2.new(110,0,0,0)
+Titulo.Position = UDim2.new(60,0,0,0)
 Titulo.BackgroundTransparency = 1
-Titulo.Text = "TROVÃO HUB V1"
+Titulo.Text = "TROVÃO HUB V1 • GL"
 Titulo.TextColor3 = Color3.fromRGB(255,0,255)
 Titulo.Font = Enum.Font.GothamBold
-Titulo.TextSize = 26
-Titulo.TextXAlignment = Enum.TextXAlignment.Center
+Titulo.TextSize = 24
 Titulo.Parent = Cab
 
--- Botão Fechar
-local BtnFechar = Instance.new("TextButton")
-BtnFechar.Name = "Fechar"
-BtnFechar.Size = UDim2.new(0,50,0,50)
-BtnFechar.Position = UDim2.new(1,-55,0,5)
-BtnFechar.BackgroundColor3 = Color3.fromRGB(200,30,30)
-BtnFechar.Text = "X"
-BtnFechar.TextColor3 = Color3.fromRGB(255,255,255)
-BtnFechar.Font = Enum.Font.GothamBold
-BtnFechar.TextSize = 22
-BtnFechar.Parent = Cab
-Instance.new("UICorner",BtnFechar).CornerRadius = UDim.new(0,8)
-
--- Botão Minimizar
+-- Botões cabeçalho
 local BtnMin = Instance.new("TextButton")
-BtnMin.Name = "Min"
 BtnMin.Size = UDim2.new(0,50,0,50)
 BtnMin.Position = UDim2.new(1,-110,0,5)
 BtnMin.BackgroundColor3 = Color3.fromRGB(60,60,60)
@@ -108,19 +97,27 @@ BtnMin.TextSize = 22
 BtnMin.Parent = Cab
 Instance.new("UICorner",BtnMin).CornerRadius = UDim.new(0,8)
 
+local BtnFechar = Instance.new("TextButton")
+BtnFechar.Size = UDim2.new(0,50,0,50)
+BtnFechar.Position = UDim2.new(1,-55,0,5)
+BtnFechar.BackgroundColor3 = Color3.fromRGB(200,30,30)
+BtnFechar.Text = "X"
+BtnFechar.TextColor3 = Color3.fromRGB(255,255,255)
+BtnFechar.Font = Enum.Font.GothamBold
+BtnFechar.TextSize = 22
+BtnFechar.Parent = Cab
+Instance.new("UICorner",BtnFechar).CornerRadius = UDim.new(0,8)
+
 -- Conteúdo
 local Conteudo = Instance.new("Frame")
-Conteudo.Name = "Conteudo"
 Conteudo.Size = UDim2.new(1,-20,1,-80)
 Conteudo.Position = UDim2.new(0,10,0,70)
 Conteudo.BackgroundTransparency = 1
-Conteudo.ClipsDescendants = true
 Conteudo.Parent = Janela
 
--- Função criar botão
-local function botao(nome, x, y, acao)
+-- Função botão
+local function CriarBotao(nome, x, y, acao)
     local B = Instance.new("TextButton")
-    B.Name = nome
     B.Size = UDim2.new(0,190,0,50)
     B.Position = UDim2.new(x,0,y,0)
     B.BackgroundColor3 = Color3.fromRGB(40,20,20)
@@ -133,57 +130,37 @@ local function botao(nome, x, y, acao)
     B.AutoLocalize = false
     B.Parent = Conteudo
     Instance.new("UICorner",B).CornerRadius = UDim.new(0,6)
-    
     B.MouseButton1Click:Connect(function() acao(B) end)
     return B
 end
 
 -- LINHA 1
-botao("Gravidade 50", 0, 0, function(b)
+CriarBotao("Gravidade 50", 0, 0, function(b)
     estado.grav50 = not estado.grav50
-    if estado.grav50 then
-        alvoGrav = 50
-        b.Text = "Gravidade 50: ON"
-        b.TextColor3 = Color3.fromRGB(60,255,60)
-    else
-        alvoGrav = GRAV_PADRAO
-        b.Text = "Gravidade 50: OFF"
-        b.TextColor3 = Color3.fromRGB(255,60,60)
-    end
+    alvoGrav = estado.grav50 and 50 or GRAV_PADRAO
+    b.Text = "Gravidade 50: "..(estado.grav50 and "ON" or "OFF")
+    b.TextColor3 = estado.grav50 and Color3.fromRGB(60,255,60) or Color3.fromRGB(255,60,60)
     Workspace.Gravity = alvoGrav
 end)
 
-botao("Gravidade 70", 210, 0, function(b)
+CriarBotao("Gravidade 70", 210, 0, function(b)
     estado.grav70 = not estado.grav70
-    if estado.grav70 then
-        alvoGrav = 70
-        b.Text = "Gravidade 70: ON"
-        b.TextColor3 = Color3.fromRGB(60,255,60)
-    else
-        alvoGrav = GRAV_PADRAO
-        b.Text = "Gravidade 70: OFF"
-        b.TextColor3 = Color3.fromRGB(255,60,60)
-    end
+    alvoGrav = estado.grav70 and 70 or GRAV_PADRAO
+    b.Text = "Gravidade 70: "..(estado.grav70 and "ON" or "OFF")
+    b.TextColor3 = estado.grav70 and Color3.fromRGB(60,255,60) or Color3.fromRGB(255,60,60)
     Workspace.Gravity = alvoGrav
 end)
 
 -- LINHA 2
-botao("Gravidade 80", 0, 60, function(b)
+CriarBotao("Gravidade 80", 0, 60, function(b)
     estado.grav80 = not estado.grav80
-    if estado.grav80 then
-        alvoGrav = 80
-        b.Text = "Gravidade 80: ON"
-        b.TextColor3 = Color3.fromRGB(60,255,60)
-    else
-        alvoGrav = GRAV_PADRAO
-        b.Text = "Gravidade 80: OFF"
-        b.TextColor3 = Color3.fromRGB(255,60,60)
-    end
+    alvoGrav = estado.grav80 and 80 or GRAV_PADRAO
+    b.Text = "Gravidade 80: "..(estado.grav80 and "ON" or "OFF")
+    b.TextColor3 = estado.grav80 and Color3.fromRGB(60,255,60) or Color3.fromRGB(255,60,60)
     Workspace.Gravity = alvoGrav
 end)
 
 local BtnReset = Instance.new("TextButton")
-BtnReset.Name = "ResetGrav"
 BtnReset.Size = UDim2.new(0,190,0,50)
 BtnReset.Position = UDim2.new(210,0,60,0)
 BtnReset.BackgroundColor3 = Color3.fromRGB(40,20,20)
@@ -198,30 +175,29 @@ Instance.new("UICorner",BtnReset).CornerRadius = UDim.new(0,6)
 BtnReset.MouseButton1Click:Connect(function()
     alvoGrav = GRAV_PADRAO
     Workspace.Gravity = GRAV_PADRAO
-    StarterGui:SetCore("Notification", {Title="⚡ TROVÃO HUB", Text="Gravidade restaurada!", Duration=2})
 end)
 
 -- LINHA 3
-botao("Drift Cam", 0, 120, function(b)
+CriarBotao("Drift Cam", 0, 120, function(b)
     estado.driftCam = not estado.driftCam
     b.Text = "Drift Cam: "..(estado.driftCam and "ON" or "OFF")
     b.TextColor3 = estado.driftCam and Color3.fromRGB(60,255,60) or Color3.fromRGB(255,60,60)
 end)
 
-botao("Drone", 210, 120, function(b)
+CriarBotao("Drone", 210, 120, function(b)
     estado.drone = not estado.drone
     b.Text = "Drone: "..(estado.drone and "ON" or "OFF")
     b.TextColor3 = estado.drone and Color3.fromRGB(60,255,60) or Color3.fromRGB(255,60,60)
 end)
 
 -- LINHA 4
-botao("FOV 90", 0, 180, function(b)
+CriarBotao("FOV 90", 0, 180, function(b)
     estado.fov90 = not estado.fov90
     b.Text = "FOV 90: "..(estado.fov90 and "ON" or "OFF")
     b.TextColor3 = estado.fov90 and Color3.fromRGB(60,255,60) or Color3.fromRGB(255,60,60)
 end)
 
-botao("Speed Monitor", 210, 180, function(b)
+CriarBotao("Speed Monitor", 210, 180, function(b)
     estado.speedo = not estado.speedo
     b.Text = "Speed Monitor: "..(estado.speedo and "ON" or "OFF")
     b.TextColor3 = estado.speedo and Color3.fromRGB(60,255,60) or Color3.fromRGB(255,60,60)
@@ -229,7 +205,7 @@ botao("Speed Monitor", 210, 180, function(b)
 end)
 
 -- LINHA 5
-botao("Controle", 0, 240, function(b)
+CriarBotao("Controle", 0, 240, function(b)
     estado.controle = not estado.controle
     b.Text = "Controle: "..(estado.controle and "ON" or "OFF")
     b.TextColor3 = estado.controle and Color3.fromRGB(60,255,60) or Color3.fromRGB(255,60,60)
@@ -237,7 +213,6 @@ end)
 
 -- Créditos
 local Cred = Instance.new("TextLabel")
-Cred.Name = "Credito"
 Cred.Size = UDim2.new(1,0,0,40)
 Cred.Position = UDim2.new(0,0,1,-45)
 Cred.BackgroundTransparency = 1
@@ -247,19 +222,19 @@ Cred.Font = Enum.Font.GothamBold
 Cred.TextSize = 14
 Cred.Parent = Conteudo
 
--- Minimizar / Maximizar
+-- Minimizar
 BtnMin.MouseButton1Click:Connect(function()
-    aberto = not aberto
-    Conteudo.Visible = aberto
-    BtnMin.Text = aberto and "-" or "+"
+    janelaAberta = not janelaAberta
+    Conteudo.Visible = janelaAberta
+    BtnMin.Text = janelaAberta and "-" or "+"
 end)
 
 -- Fechar
 BtnFechar.MouseButton1Click:Connect(function()
     Tela:Destroy()
     pcall(function() StarterGui:SetCore("Notification", {
-        Title = "⚡ TROVÃO HUB",
-        Text = "Obrigado por usar.\nEquipe Trovão • GL",
+        Title = "⚡ TROVÃO HUB V1 • GL",
+        Text = "Obrigado por usar!\nEquipe Trovão • GL",
         Duration = 4
     }) end)
 end)
